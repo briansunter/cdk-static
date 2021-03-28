@@ -1,5 +1,5 @@
 {
-    "app": "node pipeline/index",
+    "app": "node index",
     "context": {
         "domain": "briansunter.com",
         "subdomain": "cdk",
