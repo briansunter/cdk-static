@@ -36,8 +36,7 @@ export class CdkpipelinesDemoPipelineStack extends Stack {
          subdirectory: 'pipeline',
       }),
     });
-
-    pipeline.addApplicationStage(new ReactBuildStage(this, 'React Build', sourceArtifact, reactBuild));
+    pipeline.addApplicationStage(new ReactBuildStage(this, 'ReactBuild', sourceArtifact, reactBuild));
     pipeline.addApplicationStage(new CdkpipelinesDemoStage(this, 'PreProd', {
         env: {
             account: '847136656635',
