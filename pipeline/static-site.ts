@@ -2,7 +2,7 @@
 import cloudfront = require('@aws-cdk/aws-cloudfront');
 import route53 = require('@aws-cdk/aws-route53');
 import s3 = require('@aws-cdk/aws-s3');
-import s3deploy = require('@aws-cdk/aws-s3-deployment');
+// import s3deploy = require('@aws-cdk/aws-s3-deployment');
 import acm = require('@aws-cdk/aws-certificatemanager');
 import cdk = require('@aws-cdk/core');
 import targets = require('@aws-cdk/aws-route53-targets/lib');
@@ -20,6 +20,8 @@ export interface StaticSiteProps {
  * Route53 alias record, and ACM certificate.
  */
 export class StaticSite extends Construct {
+  public readonly siteBucket: s3.Bucket;
+  public readonly siteDistribution: cloudfront.IDistribution;
     constructor(parent: Construct, name: string, props: StaticSiteProps) {
         super(parent, name);
 
@@ -75,14 +77,16 @@ export class StaticSite extends Construct {
             target: route53.RecordTarget.fromAlias(new targets.CloudFrontTarget(distribution)),
             zone
         });
+this.siteBucket = siteBucket;
+this.siteDistribution = distribution;
 
         // Deploy site contents to S3 bucket
-        new s3deploy.BucketDeployment(this, 'DeployWithInvalidation', {
-            sources: [ s3deploy.Source.asset('../frontend/build') ],
-            destinationBucket: siteBucket,
-            distribution,
-            distributionPaths: ['/*'],
-          });
+        // new s3deploy.BucketDeployment(this, 'DeployWithInvalidation', {
+        //     sources: [ s3deploy.Source.asset('../frontend/build') ],
+        //     destinationBucket: siteBucket,
+        //     distribution,
+        //     distributionPaths: ['/*'],
+        //   });
     }
 }
 
