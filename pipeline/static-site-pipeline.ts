@@ -3,7 +3,7 @@ import * as codepipeline_actions from '@aws-cdk/aws-codepipeline-actions';
 import { Construct, SecretValue, Stack, StackProps } from '@aws-cdk/core';
 import { CdkPipeline, SimpleSynthAction } from "@aws-cdk/pipelines";
 import { CdkpipelinesDemoStage } from './static-site-stage'
-import { ReactBuildStage } from './react-build-stage'
+import * as codebuild from '@aws-cdk/aws-codebuild';
 /**
  * The stack that defines the application pipeline
  */
@@ -13,7 +13,7 @@ export class CdkpipelinesDemoPipelineStack extends Stack {
 
     const sourceArtifact = new codepipeline.Artifact();
 
-    const reactBuild = new codepipeline.Artifact();
+    const reactBuildArtifact = new codepipeline.Artifact();
     const cloudAssemblyArtifact = new codepipeline.Artifact();
  
      const pipeline = new CdkPipeline(this, 'Pipeline', {
@@ -36,7 +36,42 @@ export class CdkpipelinesDemoPipelineStack extends Stack {
          subdirectory: 'pipeline',
       }),
     });
-    pipeline.addApplicationStage(new ReactBuildStage(this, 'ReactBuild', sourceArtifact, reactBuild));
+    const reactBuild = new codebuild.PipelineProject(this, 'ReactBuild', {
+      buildSpec: codebuild.BuildSpec.fromObject({
+        version: '0.2',
+        phases: {
+          install: {
+            commands: [
+              'cd frontend',
+              'npm install',
+            ],
+          },
+          build: {
+            commands: 'npm run build',
+          },
+        },
+        artifacts: {
+          'base-directory': 'frontend',
+          files: [
+            'build/**/*',
+          ],
+        },
+      }),
+      environment: {
+        buildImage: codebuild.LinuxBuildImage.STANDARD_2_0,
+      },
+    });
+
+    pipeline.addStage("Reac").addActions(
+      
+    new codepipeline_actions.CodeBuildAction({
+      actionName: 'Lambda_Build',
+      project: reactBuild,
+      input: sourceArtifact,
+      outputs: [reactBuildArtifact],
+    })
+    )
+    // pipeline.addApplicationStage(new ReactBuildStage(this, 'ReactBuild', sourceArtifact, reactBuild));
     pipeline.addApplicationStage(new CdkpipelinesDemoStage(this, 'PreProd', {
         env: {
             account: '847136656635',
