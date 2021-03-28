@@ -40,6 +40,7 @@ class CdkpipelinesDemoPipelineStack extends core_1.Stack {
                 region: 'us-east-1'
             }
         }));
+        
         // This is where we add the application stages
         // ...
     }
