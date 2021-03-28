@@ -27,14 +27,11 @@ export class CdkpipelinesDemoPipelineStack extends Stack {
         repo: 'cdk-static',
       }),
 
-       // How it will be built and synthesized
        synthAction: SimpleSynthAction.standardNpmSynth({
          sourceArtifact,
          cloudAssemblyArtifact,
-         
-         // We need a build step to compile the TypeScript Lambda
-         buildCommand: 'npm run build'
-       }),
+         subdirectory: 'pipeline',
+      }),
     });
     pipeline.addApplicationStage(new CdkpipelinesDemoStage(this, 'PreProd', {
         env: {
