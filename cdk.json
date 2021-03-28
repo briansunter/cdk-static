@@ -1,6 +1,8 @@
 {
     "app": "node index",
     "context": {
+        "domain": "briansunter.com",
+        "subdomain": "cdk",
         "@aws-cdk/core:newStyleStackSynthesis": true
       }
 }
