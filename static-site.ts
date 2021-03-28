@@ -85,3 +85,14 @@ export class StaticSite extends Construct {
           });
     }
 }
+
+export class MyStaticSiteStack extends cdk.Stack {
+    constructor(parent: Construct, name: string, props: cdk.StackProps) {
+        super(parent, name, props);
+
+        new StaticSite(this, 'StaticSite', {
+            domainName: this.node.tryGetContext('domain'),
+            siteSubDomain: this.node.tryGetContext('subdomain'),
+        });
+   }
+}
