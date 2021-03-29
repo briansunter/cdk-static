@@ -2,7 +2,7 @@
 import cloudfront = require('@aws-cdk/aws-cloudfront');
 import route53 = require('@aws-cdk/aws-route53');
 import s3 = require('@aws-cdk/aws-s3');
-import s3deploy = require('@aws-cdk/aws-s3-deployment');
+// import s3deploy = require('@aws-cdk/aws-s3-deployment');
 import acm = require('@aws-cdk/aws-certificatemanager');
 import cdk = require('@aws-cdk/core');
 import targets = require('@aws-cdk/aws-route53-targets/lib');
@@ -80,12 +80,13 @@ export class StaticSite extends Construct {
 this.siteBucket = siteBucket;
 this.siteDistribution = distribution;
 
-        new s3deploy.BucketDeployment(this, 'DeployWithInvalidation', {
-            sources: [ s3deploy.Source.asset('../frontend/build') ],
-            destinationBucket: siteBucket,
-            distribution,
-            distributionPaths: ['/*'],
-          });
+        // Deploy site contents to S3 bucket
+        // new s3deploy.BucketDeployment(this, 'DeployWithInvalidation', {
+        //     sources: [ s3deploy.Source.asset('../frontend/build') ],
+        //     destinationBucket: siteBucket,
+        //     distribution,
+        //     distributionPaths: ['/*'],
+        //   });
     }
 }
 
