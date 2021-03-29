@@ -4,6 +4,7 @@ import { Construct, SecretValue, Stack, StackProps } from '@aws-cdk/core';
 import { CdkPipeline, SimpleSynthAction } from "@aws-cdk/pipelines";
 import { CdkpipelinesDemoStage } from './static-site-stage'
 import * as codebuild from '@aws-cdk/aws-codebuild';
+// import s3deploy = require('@aws-cdk/aws-s3-deployment');
 /**
  * The stack that defines the application pipeline
  */
@@ -63,7 +64,6 @@ export class CdkpipelinesDemoPipelineStack extends Stack {
     });
 
     pipeline.addStage("Reac").addActions(
-      
     new codepipeline_actions.CodeBuildAction({
       actionName: 'Lambda_Build',
       project: reactBuild,
@@ -71,7 +71,6 @@ export class CdkpipelinesDemoPipelineStack extends Stack {
       outputs: [reactBuildArtifact],
     })
     )
-    // pipeline.addApplicationStage(new ReactBuildStage(this, 'ReactBuild', sourceArtifact, reactBuild));
     pipeline.addApplicationStage(new CdkpipelinesDemoStage(this, 'PreProd', {
         env: {
             account: '847136656635',
