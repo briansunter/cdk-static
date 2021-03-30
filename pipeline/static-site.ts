@@ -91,12 +91,14 @@ this.siteDistribution = distribution;
 }
 
 export class MyStaticSiteStack extends cdk.Stack {
+ public readonly siteBucket: s3.Bucket;
     constructor(parent: Construct, name: string, props: cdk.StackProps) {
         super(parent, name, props);
 
-        new StaticSite(this, 'StaticSite', {
+        const site = new StaticSite(this, 'StaticSite', {
             domainName: this.node.tryGetContext('domain'),
             siteSubDomain: this.node.tryGetContext('subdomain'),
         });
+        this.siteBucket = site.siteBucket;
    }
 }

@@ -61,24 +61,25 @@ export class CdkpipelinesDemoPipelineStack extends Stack {
         buildImage: codebuild.LinuxBuildImage.STANDARD_2_0,
       },
     });
-
-    pipeline.addStage("Reac").addActions(
-      
-    new codepipeline_actions.CodeBuildAction({
-      actionName: 'Lambda_Build',
-      project: reactBuild,
-      input: sourceArtifact,
-      outputs: [reactBuildArtifact],
-    })
-    )
-    // pipeline.addApplicationStage(new ReactBuildStage(this, 'ReactBuild', sourceArtifact, reactBuild));
-    pipeline.addApplicationStage(new CdkpipelinesDemoStage(this, 'PreProd', {
+const appStack = new CdkpipelinesDemoStage(this, 'PreProd', {
         env: {
             account: '847136656635',
             region: 'us-east-1' 
         }
-      }));
-    // This is where we add the application stages
-    // ...
+      });
+    const appStage = pipeline.addApplicationStage(appStack);
+
+      appStage.addActions(
+        new codepipeline_actions.CodeBuildAction({
+          actionName: 'Lambda_Build',
+          project: reactBuild,
+          input: sourceArtifact,
+          outputs: [reactBuildArtifact],
+        }),
+        new codepipeline_actions.S3DeployAction({
+          actionName: 'S3Deploy',
+          bucket: appStack.siteBucket, // See bucket config below
+          input: reactBuildArtifact, // Output from Build step
+        }))
   }
 }
