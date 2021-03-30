@@ -1,5 +1,5 @@
 {
-    "app": "node index",
+    "app": "node react-infra",
     "context": {
         "domain": "briansunter.com",
         "subdomain": "cdk",
