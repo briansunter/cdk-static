@@ -155,7 +155,7 @@ export class ReactSampleStack extends Stack {
               actionName: 'Static-Assets',
               input: buildStaticOutput,
               bucket: webappBucket,
-              cacheControl: [CacheControl.setPublic(), CacheControl.maxAge(Duration.days(1))],
+              cacheControl: [CacheControl.setPublic(), CacheControl.maxAge(Duration.minutes(1))],
               runOrder: 1
             }),
             new S3DeployAction({
